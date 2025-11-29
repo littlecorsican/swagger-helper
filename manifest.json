@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Swagger Helper - Hide by ID",
-  "version": "1.0",
-  "description": "Hide elements with specific IDs (e.g. Swagger operations).",
-  "permissions": ["storage"],
+  "name": "Hide Elements by ID",
+  "version": "1.1",
+  "description": "Hide parent elements for specific child IDs (e.g. Swagger operations).",
+  "permissions": ["storage", "tabs"],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Hide by ID"

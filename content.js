@@ -4,7 +4,6 @@ let currentHiddenIds = new Set();
 
 /**
  * Hide a parent element and keep track of which IDs are causing it to be hidden.
- * This avoids bugs if multiple different IDs share the same parent.
  */
 function hideParentForId(id) {
   const el = document.getElementById(id);
@@ -136,3 +135,22 @@ if (document.readyState === "loading") {
 } else {
   setupObserver();
 }
+
+/**
+ * 🔁 Handle messages from popup
+ *  - LOAD_SWAGGER_ROWS: return all h3.opblock-tag[id^="operations-tag-"] IDs
+ */
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message && message.type === "LOAD_SWAGGER_ROWS") {
+    const nodes = document.querySelectorAll(
+      'h3.opblock-tag[id^="operations-tag-"]'
+    );
+    const ids = Array.from(nodes)
+      .map((n) => n.id)
+      .filter(Boolean);
+
+    sendResponse({ ids });
+  }
+
+  // no async work, so no need to return true
+});

@@ -35,13 +35,24 @@
 
       #clearBtn {
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         margin-top: -4px;
         padding: 6px;
         font-size: 12px;
         border: 1px solid #d00;
         background: #ffeded;
         color: #a00;
+        cursor: pointer;
+      }
+
+      #loadSwaggerBtn {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 6px;
+        font-size: 12px;
+        border: 1px solid #007acc;
+        background: #e7f3ff;
+        color: #005a9e;
         cursor: pointer;
       }
 
@@ -96,6 +107,7 @@
     </form>
 
     <button id="clearBtn">Clear List</button>
+    <button id="loadSwaggerBtn">Load all Swagger rows</button>
 
     <ul id="idList"></ul>
     <p id="emptyState" class="empty">No IDs yet. Add one above.</p>

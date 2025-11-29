@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const list = document.getElementById("idList");
   const emptyState = document.getElementById("emptyState");
   const clearBtn = document.getElementById("clearBtn");
+  const loadSwaggerBtn = document.getElementById("loadSwaggerBtn");
 
   let currentIds = [];
 
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderList();
   });
 
-  // Add new ID
+  // Add new ID manually
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const value = input.value.trim();
@@ -73,10 +74,46 @@ document.addEventListener("DOMContentLoaded", () => {
     renderList();
   });
 
-  // 🔥 CLEAR ALL IDS
+  // Clear all IDs
   clearBtn.addEventListener("click", () => {
     currentIds = [];
     saveIds();
     renderList();
+  });
+
+  // 🔥 Load all Swagger rows: h3.opblock-tag[id^="operations-tag-"]
+  loadSwaggerBtn.addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const [tab] = tabs;
+      if (!tab || !tab.id) return;
+
+      chrome.tabs.sendMessage(
+        tab.id,
+        { type: "LOAD_SWAGGER_ROWS" },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            // e.g. no content script on this tab
+            console.log("Content script error:", chrome.runtime.lastError.message);
+            return;
+          }
+
+          if (!response || !Array.isArray(response.ids)) return;
+
+          let changed = false;
+          response.ids.forEach((id) => {
+            if (!currentIds.includes(id)) {
+              currentIds.push(id);
+              changed = true;
+            }
+          });
+
+          if (changed) {
+            currentIds.sort();
+            saveIds();
+            renderList();
+          }
+        }
+      );
+    });
   });
 });
